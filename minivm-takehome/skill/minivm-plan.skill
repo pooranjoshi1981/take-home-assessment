@@ -1,0 +1,27 @@
+# MiniVM: what we did and what to do next
+
+## The goal
+Make an existing query do less work without changing its answer. MiniVM measures work in cycles: fewer is better. A fast wrong answer does not count. The optimizer gets the program and the schema, not the table rows.
+
+## What we built
+1. Kept two implementations so we could compare approaches on the same inputs. Haiku separates reading, analyzing, rewriting, and printing a program into modules. It reuses repeated work and has a special rewrite that filters July orders before sorting them.
+2. Built Astra separately. It gives each new register value a distinct name, starts at the requested output to find which calculations are needed, and reuses row positions when several columns select the same rows twice. Added function explanations to both implementations.
+3. Made the root `optimize` command run Astra. The original launcher just printed its input. Astra is the submission default because it used fewer cycles overall on the examples, not because it won every query.
+4. Built a separate checker. It runs the original and the rewrite on the same data, including empty tables and an alternate row arrangement. It checks row order when the query requires it, counts duplicates when order does not matter, and allows the specified small relative difference for numbers. It limits each optimizer run to one second and budgets less than two minutes for the evaluation. Speed is reported separately from correctness.
+5. Tested the checker itself. An optimizer that returns its input must pass. One that drops a duplicate must fail, even if it gets all eight benchmark queries right.
+
+## How to repeat the check
+Run these commands from the directory containing this plan, with the MiniVM binary for your platform available under `bin`:
+
+- `python -m unittest -v test_evaluator` checks the evaluator's comparisons and exit codes.
+- `python evaluate ./optimize` tests the actual submission launcher. Look for an exit code of zero, the duplicate/NULL probe passing, and the total cycles.
+- `python evaluate` runs both optimizers side by side. Keep the same data when comparing the cycle counts.
+
+## Last verified: 2026-11-20, Windows
+Both regression tests passed. Both optimizers passed the eight benchmarks and the extra duplicate/NULL check. Original: 60,363 cycles. Haiku: 54,801 (9.21% saved). Astra through the submission launcher: 49,964 (17.23% saved). Haiku still won query 7 by 222 cycles. These checks cover the tested cases; they do not prove every possible rewrite correct.
+
+## Remaining plan
+1. On Linux or macOS, run `./evaluate ./optimize` directly, without `python` in front. This checks the executable permissions and interpreter declarations as well as the results. WSL was not installed on the Windows validation machine, so this is still open.
+2. With more time, generate small programs and multiple legal datasets for each schema. Include register overwrites, tied sort keys, repeated join keys, and missing values. Run originals and rewrites side by side and keep the smallest example of each failure as a regression test.
+3. Try filtering earlier on expensive queries, starting with query 1. Check that the selected rows, their duplicates, and any required ordering survive the change before measuring the cycles saved. Keep a rewrite only when the evidence supports it.
+4. Before sending, collect the requested source, prompts, documentation, logs, raw agent sessions, and available Git history. Record which models were used and label token or spend estimates as estimates. Review the package for secrets and exclude binaries, including MiniVM itself. Do not substitute this plan for the raw sessions.
