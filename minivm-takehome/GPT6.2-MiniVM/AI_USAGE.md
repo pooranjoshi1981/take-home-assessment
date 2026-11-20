@@ -1,0 +1,5 @@
+# AI usage disclosure
+
+GitHub Copilot in VS Code was used for implementation, evaluation, documentation and packaging. This workspace's chat journal identifies **GPT-6.2 Astra** as the primary model and **Claude Haiku 4.5** in subagent tool metadata. The available-model catalog is not evidence that every listed model was used.
+
+Approximate usage observed during submission preparation: **1.11 million prompt tokens and 48 thousand completion tokens** (about **1.15 million combined**). These are sums of the **last recorded per-request** `promptTokens` and `completionTokens` across 11 requests at the checkpoint, not a sum of every update in the append-only journal. Repeated context is included; this is not unique text volume, an invoice, or a separately metered subagent total. Subsequent packaging calls may increase usage. No dollar spend is claimed. The handoff manifest also records snapshot-time counters when present.

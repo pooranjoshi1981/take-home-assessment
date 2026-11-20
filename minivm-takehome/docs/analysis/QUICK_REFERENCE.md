@@ -23,7 +23,7 @@ The last two commands regenerate all eight saved plans and then the calculated r
 ./evaluate ./optimize
 ```
 
-The wrappers require `python3`. The VM launcher and matching platform binary must be executable; restore their execute permissions if the checkout lacks them. The full evaluator invokes a POSIX launcher, unlike the two direct Windows VM commands above.
+The wrappers default to `python3`; set `PYTHON` to an absolute interpreter path if necessary. On Linux/macOS, the VM launcher and matching platform binary must be executable. Under Windows Git Bash, the same wrappers work with `sh` on PATH and the supplied native Windows VM. See the [actual CLI checks](../../GPT6.2-MiniVM/verification.md).
 
 **Interpreting results:** `ncols` checks the output width even when `rows` is empty. Preserve duplicate rows and any specified ordering. `cycles` measures VM work, not elapsed time. See the [CLI and schema contract](../running.md), [instruction index](../instructions/README.md), and [cost table](../cycles.md).
 

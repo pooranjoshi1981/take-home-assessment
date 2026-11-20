@@ -1,5 +1,7 @@
 # Optimization plan: next experiments
 
+With a few additional days and unlimited compute and tokens, I would spend day one generating legal counterexamples and building a regression corpus; day two implementing one proven rewrite at a time; and day three running differential tests and per-rule ablations on held-out workloads. Use parallel workers for data and program generation, not to relax the one-second optimizer or two-minute evaluator limits. Ship a rule only if it preserves results across those checks and improves held-out cycle costs enough to justify its worst regressions.
+
 The [current baseline](OPTIMIZER_STATUS.md) is dead-code removal and declared-order sort replacement. The following are **proposals**, not implemented passes or projected cycle savings.
 
 | Priority | Candidate | Proof required before enabling it |
