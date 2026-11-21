@@ -1,0 +1,5 @@
+minivm-takehome/optimize text eol=lf
+minivm-takehome/evaluate text eol=lf
+*.sh text eol=lf
+minivm-takehome/GPT6.2-MiniVM/checks/* text eol=lf
+**/raw-sessions/** -text

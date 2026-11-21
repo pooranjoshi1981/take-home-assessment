@@ -1,0 +1,10 @@
+#!/bin/sh
+# Negative control: incorrect only when the evaluator presents the join-bag fixture.
+case "$1" in
+  *join-bag.mini)
+    while IFS= read -r line; do
+      case "$line" in 'OUT t'*) printf '%s\n' 'GROUP g, t' 'GFIRST ix, g' 'GATHER t, t, ix';; esac
+      printf '%s\n' "$line"
+    done < "$1" ;;
+  *) cat "$1" ;;
+esac
